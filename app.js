@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // session
 
 app.use(session({
-    secret: "thisismysecret.",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
@@ -38,7 +38,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/secrets",
+    callbackURL: "https://riz-secrets-app.herokuapp.com/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -51,7 +51,7 @@ passport.use(new GoogleStrategy({
 
 // database
 
-mongoose.connect('mongodb://localhost/user', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true}), (err) => {
+mongoose.connect('mongodb+srv://admin-riz:'+process.env.DATABASE_PWD+'@cluster0.87ypz.mongodb.net/'+process.env.DATABASE_NAME+'?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true}), (err) => {
     if (!err) {
         console.log('MongoDB Connection Succeeded.')
     } else {
@@ -70,7 +70,6 @@ const userSchema = new mongoose.Schema({
 
 
 
-// secret (must use before model)
 
 // passport plugin
 
